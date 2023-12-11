@@ -90,7 +90,7 @@ env:
   # DSL-based router
   router_flavor: "traditional"
   nginx_worker_processes: "2"
-#  proxy_access_log: /dev/stdout
+  #  proxy_access_log: /dev/stdout
   admin_access_log: /dev/stdout
   admin_gui_access_log: /dev/stdout
   portal_api_access_log: /dev/stdout
@@ -101,7 +101,7 @@ env:
   prefix: /kong_prefix/
   proxy_listen: 0.0.0.0:8000 proxy_protocol, 0.0.0.0:8443 proxy_protocol ssl http2
   real_ip_header: CF-Connecting-IP
-#  real_ip_header: proxy_protocol
+  #  real_ip_header: proxy_protocol
   trusted_ips: 0.0.0.0/0,::/0
   nginx_http_log_format: x_custom_format escape=json '{"time_local":"$time_local","remote_addr":"$remote_addr","server_addr":"$server_addr","scheme":"$scheme","host":"$host","status":$status,"request_method":"$request_method","uri":"$uri","query_string":"$query_string","server_protocol":"$server_protocol","bytes_sent":$bytes_sent,"body_bytes_sent":$body_bytes_sent,"request_length":$request_length,"http_referrer":"$http_referer","http_user_agent":"$http_user_agent","request_time":"$request_time","upstream_response_time":"$upstream_response_time","upstream_addr":"$upstream_addr","http_content_type":"$sent_http_content_type","upstream_host":"$upstream_host"}'
   proxy_access_log: /dev/stdout x_custom_format
@@ -126,8 +126,8 @@ extraLabels: {}
 
 # Specify Kong's Docker image and repository details here
 image:
-  repository: kong
-  tag: "3.1"
+  repository: hossamgbm/kong
+  tag: "2"
   # Kong Enterprise
   # repository: kong/kong-gateway
   # tag: "3.0"
@@ -317,17 +317,17 @@ proxy:
   # To proxy both TCP and UDP with LoadBalancers, you must enable the udpProxy Service
   # in the next section and place all UDP stream listen configuration under it.
   stream: []
-    #   # Set the container (internal) and service (external) ports for this listen.
-    #   # These values should normally be the same. If your environment requires they
-    #   # differ, note that Kong will match routes based on the containerPort only.
-    # - containerPort: 9000
-    #   servicePort: 9000
-    #   protocol: TCP
-    #   # Optionally set a static nodePort if the service type is NodePort
-    #   # nodePort: 32080
-    #   # Additional listen parameters, e.g. "ssl", "reuseport", "backlog=16384"
-    #   # "ssl" is required for SNI-based routes. It is not supported on versions <2.0
-    #   parameters: []
+  #   # Set the container (internal) and service (external) ports for this listen.
+  #   # These values should normally be the same. If your environment requires they
+  #   # differ, note that Kong will match routes based on the containerPort only.
+  # - containerPort: 9000
+  #   servicePort: 9000
+  #   protocol: TCP
+  #   # Optionally set a static nodePort if the service type is NodePort
+  #   # nodePort: 32080
+  #   # Additional listen parameters, e.g. "ssl", "reuseport", "backlog=16384"
+  #   # "ssl" is required for SNI-based routes. It is not supported on versions <2.0
+  #   parameters: []
 
   # Kong proxy ingress settings.
   # Note: You need this only if you are using another Ingress Controller
@@ -372,17 +372,17 @@ udpProxy:
   # ports and parameters. Listens are dynamically named after their servicePort,
   # e.g. "stream-9000" for the below.
   stream: []
-    #   # Set the container (internal) and service (external) ports for this listen.
-    #   # These values should normally be the same. If your environment requires they
-    #   # differ, note that Kong will match routes based on the containerPort only.
-    # - containerPort: 9000
-    #   servicePort: 9000
-    #   protocol: UDP
-    #   # Optionally set a static nodePort if the service type is NodePort
-    #   # nodePort: 32080
-    #   # Additional listen parameters, e.g. "ssl", "reuseport", "backlog=16384"
-    #   # "ssl" is required for SNI-based routes. It is not supported on versions <2.0
-    #   parameters: []
+  #   # Set the container (internal) and service (external) ports for this listen.
+  #   # These values should normally be the same. If your environment requires they
+  #   # differ, note that Kong will match routes based on the containerPort only.
+  # - containerPort: 9000
+  #   servicePort: 9000
+  #   protocol: UDP
+  #   # Optionally set a static nodePort if the service type is NodePort
+  #   # nodePort: 32080
+  #   # Additional listen parameters, e.g. "ssl", "reuseport", "backlog=16384"
+  #   # "ssl" is required for SNI-based routes. It is not supported on versions <2.0
+  #   parameters: []
 
 # Custom Kong plugins can be loaded into Kong by mounting the plugin code
 # into the file-system of Kong container.
@@ -396,21 +396,21 @@ udpProxy:
 # below will mount the contents of kong-plugin-rewriter-migrations at "/opt/kong/rewriter/migrations".
 plugins:
   configMaps:
-     - name: jwks-oauth-plugin
-       pluginName: jwks-oauth-plugin
-  #  - name: kong-plugin-jwt2header
-   #   pluginName: jwt2header
-    #- name: kong-plugin-proxy-cache-redis
-     # pluginName: proxy-cache-redis
+  - name: jwks-oauth-plugin
+    pluginName: jwks-oauth-plugin
+    #  - name: kong-plugin-jwt2header
+  #   pluginName: jwt2header
+  #- name: kong-plugin-proxy-cache-redis
+  # pluginName: proxy-cache-redis
 # configMaps:
-  # - pluginName: rewriter
-  #   name: kong-plugin-rewriter
-  #   subdirectories:
-  #   - name: kong-plugin-rewriter-migrations
-  #     path: migrations
-  # secrets:
-  # - pluginName: rewriter
-  #   name: kong-plugin-rewriter
+# - pluginName: rewriter
+#   name: kong-plugin-rewriter
+#   subdirectories:
+#   - name: kong-plugin-rewriter-migrations
+#     path: migrations
+# secrets:
+# - pluginName: rewriter
+#   name: kong-plugin-rewriter
 # Inject specified secrets as a volume in Kong Container at path /etc/secrets/{secret-name}/
 # This can be used to override default SSL certificates.
 # Be aware that the secret name will be used verbatim, and that certain types
@@ -533,12 +533,12 @@ ingressController:
     port: 8080
     certificate:
       provided: false
-    # Specifiy the secretName when the certificate is provided via a TLS secret
-    # secretName: ""
-    # Specifiy the CA bundle of the provided certificate.
-    # This is a PEM encoded CA bundle which will be used to validate the webhook certificate. If unspecified, system trust roots on the apiserver are used.
-    # caBundle:
-    #   | Add the CA bundle content here.
+      # Specifiy the secretName when the certificate is provided via a TLS secret
+      # secretName: ""
+      # Specifiy the CA bundle of the provided certificate.
+      # This is a PEM encoded CA bundle which will be used to validate the webhook certificate. If unspecified, system trust roots on the apiserver are used.
+      # caBundle:
+      #   | Add the CA bundle content here.
 
   ingressClass: kong
   # annotations for IngressClass resource (Kubernetes 1.18+)
@@ -582,14 +582,14 @@ ingressController:
     requests:
       cpu: 50m
       memory: 32Mi
-  # Example reasonable setting for "resources":
-  # resources:
-  #   limits:
-  #     cpu: 100m
-  #     memory: 256Mi
-  #   requests:
-  #     cpu: 50m
-  #     memory: 128Mi
+      # Example reasonable setting for "resources":
+      # resources:
+      #   limits:
+      #     cpu: 100m
+      #     memory: 256Mi
+      #   requests:
+      #     cpu: 50m
+      #     memory: 128Mi
 
 # -----------------------------------------------------------------------------
 # Postgres sub-chart parameters
@@ -713,10 +713,10 @@ waitImage:
 
 # update strategy
 #updateStrategy:
- # type: RollingUpdate
-  #rollingUpdate:
-   #maxSurge: "50%"
-   #maxUnavailable: "50%"
+# type: RollingUpdate
+#rollingUpdate:
+#maxSurge: "50%"
+#maxUnavailable: "50%"
 
 # If you want to specify resources, uncomment the following
 # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
@@ -760,9 +760,9 @@ lifecycle:
       # kong quit has a default timeout of 10 seconds, and a default wait of 0 seconds.
       # Note: together they should be less than the terminationGracePeriodSeconds setting below.
       command:
-        - kong
-        - quit
-        - '--wait=15'
+      - kong
+      - quit
+      - '--wait=15'
 
 # Sets the termination grace period for pods spawned by the Kubernetes Deployment.
 # Ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#hook-handler-execution
@@ -772,24 +772,24 @@ terminationGracePeriodSeconds: 30
 # Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 # affinity: {}
 #affinity:
- #   nodeAffinity:
-  #    requiredDuringSchedulingIgnoredDuringExecution:
-   #     nodeSelectorTerms:
-    #    - matchExpressions:
-     #     - key: kubernetes.io/hostname
-      #      operator: In
-       #     values:
-        #    - lke101911-152618-6433d14d9b25
-         #   - lke101911-152618-6433d14e37d0
-          #  - lke101911-152618-649c373aff2c
+#   nodeAffinity:
+#    requiredDuringSchedulingIgnoredDuringExecution:
+#     nodeSelectorTerms:
+#    - matchExpressions:
+#     - key: kubernetes.io/hostname
+#      operator: In
+#     values:
+#    - lke101911-152618-6433d14d9b25
+#   - lke101911-152618-6433d14e37d0
+#  - lke101911-152618-649c373aff2c
 
 
 # Topology spread constraints for pod assignment (requires Kubernetes >= 1.19)
 # Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
 topologySpreadConstraints:
-  - maxSkew: 1
-    topologyKey: kubernetes.io/hostname
-    whenUnsatisfiable: ScheduleAnyway
+- maxSkew: 1
+  topologyKey: kubernetes.io/hostname
+  whenUnsatisfiable: ScheduleAnyway
 
 # Tolerations for pod assignment
 # Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
@@ -827,12 +827,12 @@ autoscaling:
   targetCPUUtilizationPercentage:
   ## Otherwise for clusters that do support autoscaling/v2 or autoscaling/v2beta, use metrics
   metrics:
-    - type: Resource
-      resource:
-        name: cpu
-        target:
-          type: Utilization
-          averageUtilization: 70
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
 
 # Kong Pod Disruption Budget
 podDisruptionBudget:
@@ -856,9 +856,9 @@ podSecurityPolicy:
     supplementalGroups:
       rule: RunAsAny
     volumes:
-      - 'configMap'
-      - 'secret'
-      - 'emptyDir'
+    - 'configMap'
+    - 'secret'
+    - 'emptyDir'
     allowPrivilegeEscalation: false
     hostNetwork: false
     hostIPC: false
@@ -898,15 +898,15 @@ serviceMonitor:
   namespace: kong
   labels:
     release: prometheus
-  # Specifies namespace, where ServiceMonitor should be installed
-  # namespace: monitoring
-  # labels:
-  #   foo: bar
-  # targetLabels:
-  #   - foo
+    # Specifies namespace, where ServiceMonitor should be installed
+    # namespace: monitoring
+    # labels:
+    #   foo: bar
+    # targetLabels:
+    #   - foo
 
-  # honorLabels: false
-  # metricRelabelings: []
+    # honorLabels: false
+    # metricRelabelings: []
 
 # -----------------------------------------------------------------------------
 # Kong Enterprise parameters
@@ -956,7 +956,7 @@ enterprise:
       # be left as-is. If smtp_username is set to anything other than an empty
       # string, you must create a Secret with an smtp_password key containing
       # your SMTP password and specify its name here.
-      smtp_username: ''  # e.g. postmaster@example.com
+      smtp_username: '' # e.g. postmaster@example.com
       smtp_password_secret: CHANGEME-smtp-password
 
 manager:
@@ -1144,17 +1144,17 @@ extraSecrets: []
 
 #extraObjects: []
 extraObjects:
-  - apiVersion: configuration.konghq.com/v1
-    kind: KongClusterPlugin
-    metadata:
-      name: prometheus
-      annotations:
-        kubernetes.io/ingress.class: kong
-      labels:
-        global: "true"
-    config:
-      per_consumer: false
-      bandwidth_metrics: true
-      latency_metrics: true
-      status_code_metrics: true
-    plugin: prometheus
+- apiVersion: configuration.konghq.com/v1
+  kind: KongClusterPlugin
+  metadata:
+    name: prometheus
+    annotations:
+      kubernetes.io/ingress.class: kong
+    labels:
+      global: "true"
+  config:
+    per_consumer: false
+    bandwidth_metrics: true
+    latency_metrics: true
+    status_code_metrics: true
+  plugin: prometheus

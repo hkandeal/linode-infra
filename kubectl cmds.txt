@@ -1,0 +1,6 @@
+kubectl edit deployment kong-kong -n kong
+
+kubectl edit svc kong-kong -n kong
+
+
+kubectl -n bozo-book-library-dev describe pod

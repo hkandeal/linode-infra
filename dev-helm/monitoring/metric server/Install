@@ -1,0 +1,7 @@
+kubectl apply -f metrics-server.yaml
+helm install metrics-server metrics-server/metrics-server --namespace kube-system  -f values.yml
+kubectl top nodes  
+
+https://github.com/kubernetes-sigs/metrics-server/blob/master/charts/metrics-server/README.md
+
+https://www.linode.com/community/questions/19756/how-can-i-deploy-the-kubernetes-metrics-server-on-lke

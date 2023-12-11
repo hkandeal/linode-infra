@@ -1,0 +1,78 @@
+export KUBECONFIG=~/Downloads/Narvik-kubeconfig.yaml
+
+===========================================================================
+
+helm install hands-on-dev-env kubernetes/helm/environments/dev-env
+helm upgrade  hands-on-dev-env kubernetes/helm/environments/dev-env
+helm install \
+  cert-manager jetstack/cert-manager \
+  --namespace cert-manager \
+  --create-namespace \
+  --version v1.11.0
+
+helm upgrade vault hashicorp/vault -f vault-vals.yml
+kubectl apply -f kubernetes/cert-manager/acme-issuer-prod.yaml
+
+./gradlew build -x test && docker-compose build
+
+kubectl config set-context $(kubectl config current-context) --namespace=hands-on
+
+kubectl get pods --watch
+
+sudo bash -c "echo 127.0.0.1 hello-world.info | tee -a /etc/hosts"
+
+curl "https://hossam.io/openapi/webjars/swagger-ui/index.html?configUrl=/openapi/v3/api-docs/swagger-config" -kv
+
+ACCESS_TOKEN=$(curl -d grant_type=client_credentials -ks https://writer:secret@70.187.226.26:30443 oauth2/token | jq .access_token -r)
+
+curl -kH "Authorization: Bearer $wewe https://$170.187.226.26:30443/product-composite/1
+
+
+ minikube start --profile=handson-spring-boot-cloud --memory=10240 --cpus=4 --disk-size=30g --kubernetes-version=latest --driver=docker --ports=8080:80 --ports=8443:443 --ports=30080:30080 --ports=30443:30443
+
+
+for f in kubernetes/helm/components/*; do helm dep up $f; done
+for f in kubernetes/helm/environments/*; do helm dep up $f; done
+helm dep ls kubernetes/helm/environments/dev-env/
+helm template kubernetes/helm/environments/dev-env
+helm install hands-on-dev-env kubernetes/helm/environments/dev-env
+
+
+
+docker build -t product-service --platform linux/amd64 .
+docker tag product-service hossamgbm/product-service:v1
+docker push hossamgbm/product-service:v1
+
+Services:
+product-service
+gateway
+Auth-server
+Config-server
+
+Steps:
+Install ingress controller
+Install cert manager
+Deploy cluster issuer
+Deploy vault with values
+
+
+
+curl "https://hossam.io/openapi/webjars/swagger-ui/index.html?configUrl=/openapi/v3/api-docs/swagger-config" -kv
+curl "https://vault.hossam.io" -kv
+
+
+
+vault write auth/kubernetes/role/webapp \
+        bound_service_account_names=vault-auth \
+        bound_service_account_namespaces=handson-book \
+        policies=svc-policy \
+        ttl=72h
+
+
+https://cert-manager.io/docs/tutorials/acme/nginx-ingress/
+kubectl get --raw "/apis/metrics.k8s.io/v1beta1/nodes" | jq '.'
+
+
+
+
+

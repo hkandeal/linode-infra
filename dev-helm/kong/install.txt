@@ -1,0 +1,3 @@
+helm repo add kong https://charts.konghq.com ; helm repo update
+
+helm upgrade kong  kong/kong --namespace kong -f values.yml

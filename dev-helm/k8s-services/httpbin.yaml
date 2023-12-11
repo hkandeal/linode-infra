@@ -1,0 +1,74 @@
+# Usage:
+# -----
+# go run internal/cmd/main.go
+# kubectl apply -f examples/httpbin.yaml
+# kubectl get secrets kong-config -o=go-template='{{index .data "networking.k8s.io-v1-Ingress-default-httpbin-ingress" }}' | base64 -d
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpbin-deployment
+  labels:
+    app: httpbin
+  annotations:
+    prometheus.io/scrape: 'true'
+    prometheus.io/port:   '9090' 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: httpbin
+  template:
+    metadata:
+      labels:
+        app: httpbin
+    spec:
+      containers:
+      - name: httpbin
+        image: kong/httpbin:0.1.0
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: httpbin
+  name: httpbin-deployment
+  annotations:
+    prometheus.io/scrape: 'true'
+    prometheus.io/port:   '9090' 
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: httpbin
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: httpbin-ingress
+  annotations:
+    httpbin.ingress.kubernetes.io/rewrite-target: /
+    kubernetes.io/ingress.class: kong
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+
+spec:
+  tls:
+  - hosts:
+    - httpbin.hossam.io
+    secretName: httpbin-ingress-tls
+  rules:
+  - host: httpbin.hossam.io
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: httpbin-deployment
+            port:
+              number: 80
